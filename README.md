@@ -122,3 +122,73 @@ readings = [
 ]
 
 example response: {user_id: 1, amount: 65}
+```
+
+
+
+## Part 2: Use appropriate REST conventions and status codes
+
+### Task 1
+
+1. So, for everything seems great. However one of the security tester found that all our APIs are exposed publicly i.e., you can get all users information is available to all users.
+Your task is secure those data now.
+
+ `GET /users` should be only accessed by admin user
+ `GET /users/1` should be only accessed by intended/authenticated user
+
+ Hint: Think of headers?
+
+
+### Task 2
+
+1. As a user I want to know my past 1 week, 1 month, 2 months of units consumed so that I would like to reduce my usage consumption.
+
+Note: user can request for any number of days.
+
+
+### Task 3
+
+1. Bill API we developed last time seems to have a bug it is generating amount based on total readings available however bill will generated only for billing cycle
+
+Assume: Billing cycle is always first date of month to last date of month
+    ex:  all readings from 1 Jan, 2024 to 31 Jan, 2024 will fall under 1 billing cycle.
+
+
+
+### Task 4
+
+1. As a user I would like to know what is best provider I can choose from.
+Given system has already has my past usage data I would like to call an API that compares cost against all providers and returns me the top 3 providers( least cost should come first in response list)
+
+
+### Task 5
+
+1. We've made our `GET /users` more secure now, however one of the developer found that if there large no.of users in the system calling this API to return response is very slow and that developer suggested may be we will implement a solution to return 5 records at a time.
+
+Hint : Think about how do you limit responses to 5 users and how do you fetch next 5 records ?
+
+
+### Task 6
+1. Security researcher found another major issue that we are returning password field when returning data back to client in `GET /users` and `GET /users/:id` and client wants an immediate fix for that.
+
+Hint: How do you ignore sending certain fields from response ? Think of DTOs may be?
+
+### Task 7
+1. Our app gain a huge popularity so many users started using it. Since many people are using it our app has slowed other users when one user it and making continuous requests.
+
+ex: when a user makes continuous requests ( lets say 100 requests/sec ) then app becoming unavailable to other users
+so one of the developer suggested an approach to implement FUP(Fair Usage Policy) to limit no.of requests a user can make in given time period.
+
+Your task is to build a solution that a user can only make 10 requests in 1 minute. so within 1 minute a user can't make requests more that 10 otherwise will return Too many requests message
+
+ex:
+0th second to 60th second
+1. `GET /users/1` => is ok
+2. `GET /users/1` => is ok
+...               => is ok
+...               => is ok
+10. `GET /users/1` => is ok
+11. `GET /users/1` => Too many requests.
+
+61th second ( limit will reset after every minute)
+1. `GET /users/1` => is ok
